@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="MfcPracApp/MfcPracApp.vcxproj" />
+  <Project Path="Win32ControlsApp/Win32ControlsApp.vcxproj" />
+  <Project Path="Win32FirstApp/Win32FirstApp.vcxproj" />
+</Solution>
