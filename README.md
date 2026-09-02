@@ -70,3 +70,106 @@ WndProc(
 - LPARAM : Long Parameter(uint), 두번째 추가 메시지 데이터
 
 ### MFC 프로젝트 생성
+
+
+### MFC 기초 학습
+#### 기초 사상
+순수 Win32 컨트롤 생성 함수
+```cpp
+HWND wnd = CreateWindow(...);
+```
+
+MFC는 각 컨트롤을 C_ 로 만들어 놓음
+```cpp
+
+```
+
+##### 디자인 화면
+리소스 뷰 (Ctrl + Shift + E)
+
+- 디자인 확인 가능
+- Dialog Based는 리소스에서 확인 가능하지만, SDI/MDI는 전체 화면을 확인할 메뉴/디자인뷰가 없음
+
+| 방식           | 의미           |   난이도 |
+| ------------ | ------------ | ----: |
+| Dialog Based | 일반 폼 형태      |     ★ |
+| SDI          | 한 문서 중심 프로그램 |   ★★★ |
+| MDI          | 여러 문서/창 관리   | ★★★★★ |
+
+
+- 프로그램 자체
+    - MFCBasic.h
+    - **MFCBasic.cpp** : 프로그램 시작점
+- 화면(Dialog) UI
+    - **MFCBasicDlg.h** : Dialog 클래스 선언 헤더 파일
+    - **MFCBasicDlg.cpp** : 화면 수정시 가장 많이 변경하는 파일
+- 리소스 UI
+    - **MFCBasic.rc** : 가장 중요한 리소스 파일. 다이얼로그 디자인, 메뉴, 아이콘, 툴바, 문자열 테이블, 버전, 비트맵...
+    - MFCBasic.rc2 : 사용 안함, 백업과 유사
+    - `Resource.h` : rc에 있는 리소스 ID를 정의
+    - MFCBasic.ico : 기본 아이콘 MFC 로고
+- MFC 공통설정
+    - pch.h
+    - pch.cpp : Precompiled Header용 cpp. 수정 안함. VS가 사용하는 파일
+    - framework.h : 프로젝트 전체 사용하는 Windows 헤더 포함
+    - targetver.h : 지원할 Windows 버전 지정
+
+```plaintext
+#Win32 API
+
+WinMain() 실행
+    ↓
+윈도우 실행
+    ↓
+메시지 루프
+    ↓
+WndProc()
+```
+
+```plaintext
+# MFC
+
+MFC 내부 WinMain() 자동 실행
+    ↓
+CWinApp
+    ↓
+InitInstance()
+    ↓
+Dialog 생성
+```
+
+- MFCBasic.cpp 소스
+
+#### CDialogEx 클래스
+    - MFCBasicDlg.h 소스
+```cpp
+
+```
+
+##### Win32와 가장 큰 차이
+- Win32 API는 `HWND hwnd;`라는 핸들을 중심으로 코딩
+- MFC는 `CMFCBasicDlg dlg;` C++ 객체로 코딩. 실제 MFC 내부에 HWND 로 구성되어 있고, 이걸 MFC가 핸들링
+- MFC CWnd는 Win32 API의 HWND를 C++ 클래스로 감싸 놓은 것일 뿐
+
+
+#### MFC로 컨트롤 구성하기
+
+
+
+##### WM_COMMAND 가 없다
+    - MFC의 Message Map에서 처리해 줌
+    - MFCBasicDlg.cpp 소스
+        - 버튼 추가하고 
+
+```cpp
+BEGIN_MESSAGE_MAP(CMFCBasicDlg, CDialogEx)
+    ON_WM_PAINT()
+    ON_WM_QUERYDRAGICON()
+    ON_BN_CLICKED(IDC_BUTTON_OK, &CMFCBasicDlg::OnBnClickedButtonOk)
+END_MESSAGE_MAP()
+```
+
+##### 장점
+
+##### MFC 학습 순서
+1. Dialog 
