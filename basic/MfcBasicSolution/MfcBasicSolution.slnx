@@ -4,6 +4,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="MFCBasic/MFCBasic.vcxproj" />
+  <Project Path="MFCControls/MFCControls.vcxproj" />
   <Project Path="MfcPracApp/MfcPracApp.vcxproj" />
   <Project Path="Win32ControlsApp/Win32ControlsApp.vcxproj" Id="3248afe9-f2b6-4136-ba1b-8ae84ce9fa7f" />
   <Project Path="Win32FirstApp/Win32FirstApp.vcxproj" Id="5e11fa09-28ba-4f65-81a9-6e5c12e1f307" />

@@ -173,3 +173,25 @@ END_MESSAGE_MAP()
 
 ##### MFC 학습 순서
 1. Dialog 
+
+
+#### Resource Editor
+Visual Studio 가 제공하는 GUI 디자이너 기능. C# WinForms의 Form Designer와 비슷한 기능
+
+기능은 동일하지만 C# WinForms보다 제약사항이 많고, 대부분 코딩으로 처리를 해야 함
+
+리소스 뷰(Ctrl + Shift + E)
+
+
+DDX/DDV
+- DDX(Dialog Data Exchange)
+
+```plaintext
+TxtName.Text // C#방식
+```
+
+- C# 방식. 아주 간단
+
+```cpp
+UpdateData(TRUE);
+```
