@@ -1,31 +1,28 @@
 #include <Windows.h>
 
-LRESULT CALLBACK WndProc(		
-	HWND hwnd,					
-	UINT message,				
-	WPARAM wParam,				
-	LPARAM lParam				
+LRESULT CALLBACK WndProc(
+	HWND hwnd,
+	UINT message,
+	WPARAM wParam,
+	LPARAM lParam
 );
-
 
 int WINAPI WinMain(
 	HINSTANCE hInstance,		
 	HINSTANCE hPrevInstance,	
 	LPSTR lpCmdLine,			
-	int nCmdShow
+	int nCmdShow				
 ) {
+	WNDCLASS wc = {};
 	
-	WNDCLASS wc = {};	
+	wc.lpfnWndProc = WndProc;	
+	wc.hInstance = hInstance;	
+	wc.lpszClassName = L"MyWindowClass";  
+	wc.hCursor = LoadCursor(NULL, IDC_HAND);  
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 20); 
 
+	RegisterClass(&wc);    
 	
-	wc.lpfnWndProc = WndProc;					
-	wc.hInstance = hInstance;					
-	wc.lpszClassName = L"MyWindowClass";		
-	wc.hCursor = LoadCursor(NULL, IDC_HAND);	
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+20);	
-
-	RegisterClass(&wc);			
-
 	HWND hwnd = CreateWindow(
 		L"MyWindowClass",
 		L"두번째 윈도우",			
@@ -37,27 +34,26 @@ int WINAPI WinMain(
 		NULL,						
 		NULL,						
 		hInstance,					
-		NULL						
+		NULL 						
 	);
 
 	if (hwnd == NULL) {
-		return 0;	
+		return 0;   
 	}
 
-	ShowWindow(hwnd, nCmdShow);				
-	UpdateWindow(hwnd);						
+	ShowWindow(hwnd, nCmdShow);		
+	UpdateWindow(hwnd);				
 
 	MSG msg = {};
 
-	while (GetMessage(&msg, NULL, 0, 0)) {	
-		TranslateMessage(&msg);				
-		DispatchMessage(&msg);				
+	while (GetMessage(&msg, NULL, 0, 0)) {  
+		TranslateMessage(&msg);		
+		DispatchMessage(&msg);		
 	}
 
-	return (int)msg.wParam;					
+	return (int)msg.wParam;         
 }
 
-											
 LRESULT CALLBACK WndProc(
 	HWND hwnd,
 	UINT message,
@@ -65,8 +61,9 @@ LRESULT CALLBACK WndProc(
 	LPARAM lParam
 ) {
 	switch (message) {
-	case WM_CREATE:											// 윈도우가 생성되면
-															// 1.버튼도 CreateWindow() 함수 사용 - 버튼도 사실 하나의 Window임
+	case WM_CREATE:  // 윈도우가 생성되면
+
+		// 1. 버튼도 CreateWindow() 함수 사용 - 버튼도 사실 하나의 Window임
 		CreateWindow(
 			L"BUTTON",
 			L"확인",
@@ -81,7 +78,7 @@ LRESULT CALLBACK WndProc(
 			NULL
 		);
 
-															// 2. 텍스트 추가
+		// 2. 텍스트 추가
 		CreateWindow(
 			L"STATIC",
 			L"Hello, Win32API!",
@@ -108,8 +105,8 @@ LRESULT CALLBACK WndProc(
 		}
 		return 0;
 
-	case WM_DESTROY:						
-		PostQuitMessage(0);					
+	case WM_DESTROY:   
+		PostQuitMessage(0);   
 		return 0;
 	}
 

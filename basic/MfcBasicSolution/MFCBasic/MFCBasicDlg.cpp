@@ -87,9 +87,8 @@ HCURSOR CMFCBasicDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
 void CMFCBasicDlg::OnBnClickedButtonOk()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	AfxMessageBox(L"헬로우 MFC!");
+	AfxMessageBox(L"헬로우, MFC!!");
 }
