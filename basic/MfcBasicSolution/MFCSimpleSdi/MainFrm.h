@@ -47,6 +47,12 @@ public:
 	bool m_bChecked = false;
 	afx_msg void OnPracMsg();
 	afx_msg void OnMenuCheck();
+	afx_msg void OnToolPrac();
+
+	// 자식클래스에서 상태바에 접근할 수 있는 함수를 선언
+	void SetStatusText(CString str);
+	afx_msg void OnFileOpen();
+	afx_msg void OnFileSave();
 };
 
 

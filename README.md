@@ -1039,6 +1039,9 @@ private:
 https://github.com/user-attachments/assets/540ef5ed-f58e-4123-b381-53a579dd118e
 
 
+```cpp
+bool m_bDrag = false;
+```
 
 #### MFC 학습 순서
 
