@@ -1278,6 +1278,38 @@ void CMainFrame::OnPracMsg()
 
 - 커스텀 다이얼로그 실행화면
 
+
+
+##### MFC 스레드
+
+- Process와 Thread 차이
+	- Process : 하나의 실행파일
+	- Thread : 실행파일 내 CPU가 실제로 실행하는 작업 흐름. 시분할로 여러개를 나눠서 실행
+
+- AfxBeginThread() 함수로 시작
+```cpp
+CWinThread* AfxBeginThread(
+    AFX_THREADPROC pfnThreadProc,	// AFX_THREADPROC - Thread 함수의 주소. 이 함수를 실행하라는 의미
+    LPVOID pParam					// void* - 아무 자료형이나 전달 가능
+);
+```
+
+- Thread 함수
+```cpp
+UINT ThreadProc(LPVOID pParam){		// UINT - 종료하면서
+	...
+	return 0;	// 정상종료
+}
+```
+
+- 스레드 실행
+```cpp
+AfxBeginThread(ThreadProc, NULL);
+```
+
+- 파라미터 전달해서 스레드 호출
+- WPF, C# WinForm(Python 동일) 스레드에서 UI를 직접 수정하지 말 것
+
 #### MFC 학습 순서
 
 1. [x] Dialog Based MFC
