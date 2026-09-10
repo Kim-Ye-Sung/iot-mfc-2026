@@ -968,7 +968,7 @@ void CChildView::OnPaint()
 
 - 실행결과
 
-##### MFC 마우스/키보드
+##### MFC 마우스
 
 - 마우스 메시지
   - WM_LBUTTONDOWN -> OnLButtonDown()
@@ -1012,7 +1012,7 @@ private:
 	CPoint m_ptClick;  // 클릭한 위치 기억 변수
 ```
 
-- 마우스 클릭 위치 저장변수
+- 마우스 클릭 위치 저장변수 m_ptClick
 
 ```cpp
 	m_ptClick = point;
@@ -1035,13 +1035,248 @@ private:
 
 - OnPaint() 아래 원그리기 함수 추가
 
-
 https://github.com/user-attachments/assets/540ef5ed-f58e-4123-b381-53a579dd118e
-
 
 ```cpp
 bool m_bDrag = false;
+CPoint m_ptCircle = CPoint(200, 200);
 ```
+
+- 마우스 드래그 여부 확인변수 m_bDrag
+- 원을 그릴 위치 변수 m_ptCircle
+
+```cpp
+void CChildView::OnPaint()
+{
+    ...
+	CPen pen2;   // 펜 생성
+	pen2.CreatePen(PS_SOLID, 4, RGB(0, 0, 255));
+	dc.SelectObject(&pen2);  // 펜 선택
+
+	dc.Ellipse(
+		m_ptCircle.x - 30,
+		m_ptCircle.y - 30,
+		m_ptCircle.x + 30,
+		m_ptCircle.y + 30
+	);
+} // end of OnPaint()
+
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point) {
+	...
+	m_bDrag = true;
+	Invalidate();  // 화면 다시그리기 요청 함수
+	CWnd::OnLButtonDown(nFlags, point);
+} // end of OnLButtonDown()
+
+void CChildView::OnLButtonUp(UINT nFlags, CPoint point) {
+	m_bDrag = false;
+} // end of OnLButtonUp()
+
+void CChildView::OnMouseMove(UINT nFlags, CPoint point) {
+	...
+
+	if (m_bDrag) {
+		m_ptCircle = point;
+
+		Invalidate();  // 화면 업데이트
+	}
+
+	CWnd::OnMouseMove(nFlags, point);
+} // end of OnMouseMove()
+
+```
+
+![](assets/20260909_093256_image.png)
+
+- 마우스 클릭 위치에 빨간원, 드래그시 파란원 따라옴
+
+##### MFC 키보드
+
+- Win32 API 비교
+  - WM_KEYDOWN -> OnKeyDown()
+  - WM_KEYUP -> OnKeyUp()
+  - WM_CHAR -> OnChar() : 특정 키를 눌렀을때
+- MessageMap
+
+![](assets/20260909_093904_image.png)
+
+- 메뉴 프로젝트 > 클래스 마법사로 추가 가능
+- OnKeyDown() : 모든 키보드의 키값을 가져오기
+- OnChar() : 숫자, 알파벳등 실제 키값만 가져옴. 특수키 제외
+- OnKeyUp() : 어떤 키던지 누르고 떼면 발생
+
+![](assets/20260909_095030_image.png)
+
+- 대문자 A를 눌렀을때 OnKeyDown() 발생 결과
+
+```cpp
+void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	switch (nChar) {
+	case VK_LEFT:
+		m_ptBox.x -= 10;
+		break;
+	case VK_RIGHT:
+		m_ptBox.x += 10;
+		break;
+	case VK_UP:
+		m_ptBox.y -= 10;
+		break;
+	case VK_DOWN:
+		m_ptBox.y += 10;
+		break;
+	}
+
+	Invalidate();  // 화면 다시그리기 요청 함수
+
+	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+```
+
+![](assets/20260909_101718_image.png)
+
+- 키보드로 박스 이동 결과화면
+- 만약 키보드가 입력이 안되면. SetFocus() 함수 실행
+
+##### 툴바
+
+- 메뉴바 아래에 아이콘으로 존재하는 버튼 모음
+- 메뉴 중에서 자주 사용하는 기능을 버튼으로 빼놓은 것
+- 툴바는 MainFrame에서 관리 - Resource View에서 확인
+
+![](assets/20260909_103727_image.png)
+
+- VS 비트맵 에디터에서 수정 가능 -> Paint.NET 등의 그래픽편집기로 수정
+- MFC 클래식 툴바 이미지 4bit bmp로 반드시 지정
+
+![](assets/20260909_104137_image.png)
+
+- 이벤트 추가
+
+```cpp
+void CMainFrame::OnToolPrac()
+{
+	OnPracMsg(); // 이전에 만들었던 메뉴 클릭함수 호출
+}
+```
+
+- 메뉴 클릭 함수를 그대로 호출
+
+##### 상태바
+
+- 프로그램 내 여러 상태를 표시하는 컨트롤
+
+```cpp
+static UINT indicators[] =
+{
+	ID_SEPARATOR,         // 상태 줄 표시기
+	ID_INDICATOR_CAPS,    // 캡락
+	ID_INDICATOR_NUM,     // 넘버락
+	ID_INDICATOR_SCRL,    // 스크롤락
+};
+
+
+```
+
+- 상태바 객체변수는 MainFrame에 protected로 선언되어 자식창에서 접근불가
+
+```cpp
+void CMainFrame::SetStatusText(CString str)
+{
+	m_wndStatusBar.SetPaneText(0, str);
+}
+```
+
+```cpp
+#include "MainFrm.h"
+```
+
+- ChildView.cpp에 MainFrm.h 추가
+
+```cpp
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point) {
+	CString str;
+	str.Format(L"(%d, %d)", point.x, point.y);
+
+	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();  // 부모창 MainFrame 포인터 가져오기
+	pFrame->SetStatusText(str); // 상태바 표시함수 호출
+        ...
+
+```
+
+![](assets/20260909_112109_image.png)
+
+- 마우스 클릭위치 표시
+
+##### Dialog
+
+- Dialog Based MFC와 동일
+- SDI나 MDI에서 파일오픈, 파일저장 등의 추가 팝업창을 띄울 때 사용
+
+![](assets/20260909_112654_image.png)
+
+- 메뉴에서 열기(ID_FILE_OPEN), 저장(ID_FILE_SAVE) 생성
+
+![](assets/20260909_113020_image.png)
+
+- 클래스 마법사 사용시 `클래스 이름` 선택 주의!
+
+```cpp
+void CMainFrame::OnFileOpen()
+{
+	CFileDialog dlg(
+		TRUE,
+		L"txt",
+		NULL,
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
+		L"텍스트 파일 (*.txt)|*.txt|모든 파일 (*.*)|*.*||"
+		);
+	CString path;
+
+	if (dlg.DoModal() == IDOK) {
+		// 파일을 선택했으면 처리
+		path = dlg.GetPathName();
+
+		m_wndStatusBar.SetPaneText(0, path);
+	}
+}
+```
+
+![](assets/20260909_113929_image.png)
+
+- 파일 오픈 다이얼로그
+
+```cpp
+CFileDialog dlg(
+		FALSE,     // 파일 저장
+		L"txt",
+		NULL,
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
+		L"텍스트 파일 (*.txt)|*.txt|모든 파일 (*.*)|*.*||"
+		);
+```
+
+##### Custom Dialog
+
+- 메뉴 프로젝트 > 클래스 마법사 > 클래스 추가 > MFC 클래스
+
+![](assets/20260909_120300_image.png)
+
+- 입력 후 확인
+
+```cpp
+void CMainFrame::OnPracMsg()
+{
+	AfxMessageBox(L"Hello, MFC!");
+
+	CTestDlg dlg;   // include 필요!
+	dlg.DoModal();
+}
+```
+
+![](assets/20260909_120642_image.png)
+
+- 커스텀 다이얼로그 실행화면
 
 #### MFC 학습 순서
 
@@ -1056,8 +1291,10 @@ bool m_bDrag = false;
 9. [x] DDX / DDV
 10. [x] Timer
 11. [x] SDI(Single Document Interface)
-12. [ ] 메뉴 / Dialog
-13. [ ] MDI(Multiple DI)
-14. [ ] GDI(Graphic Device Interface) : 원, 사각형 그래픽 그리기
-15. [ ] 스레드...
-16. [ ] 토이프로젝트 : 메모장(NotePad) 프로젝트
+12. [x] GDI(Graphic Device Interface) : 원, 사각형 그래픽 그리기
+13. [x] 메뉴
+14. [x] 툴바
+15. [x] Dialog
+16. [ ] ~~MDI(Multiple DI)~~
+17. [ ] 스레드...
+18. [ ] 토이프로젝트 : 메모장(NotePad) 프로젝트

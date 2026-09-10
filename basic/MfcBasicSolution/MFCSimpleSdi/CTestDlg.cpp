@@ -2,7 +2,7 @@
 //
 
 #include "pch.h"
-#include "MFCBasic.h"
+#include "MFCSimpleSdi.h"
 #include "afxdialogex.h"
 #include "CTestDlg.h"
 
@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(CTestDlg, CDialogEx)
 
 CTestDlg::CTestDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_CTestDlg, pParent)
+	: CDialogEx(IDD_TESTDLG, pParent)
 {
 
 }

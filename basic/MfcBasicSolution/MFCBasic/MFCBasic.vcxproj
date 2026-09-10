@@ -195,7 +195,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CTestDlg.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MFCBasic.h" />
     <ClInclude Include="MFCBasicDlg.h" />
@@ -204,7 +203,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CTestDlg.cpp" />
     <ClCompile Include="MFCBasic.cpp" />
     <ClCompile Include="MFCBasicDlg.cpp" />
     <ClCompile Include="pch.cpp">
